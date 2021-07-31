@@ -2,7 +2,7 @@ import argparse
 
 from PIL import Image
 
-from palette import get_colors
+from realcel.color_utils import get_colors
 
 def open_input_image(input_name: str) -> Image:
     """Open the given input image and return an image object handling any errors."""
@@ -16,7 +16,7 @@ def write_output_image(output_image: Image, output_name: str) -> bool:
     try:
         output_image.save(output_name)
         return True
-    except OSError:
+    except ValueError:
         return False
 
 def create_palette(input_image: Image, output_target: str) -> bool:

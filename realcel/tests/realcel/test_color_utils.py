@@ -1,23 +1,49 @@
-import realcel.color_utils as color
+from random import randint
+
+from PIL import Image
+
+from realcel.color_utils import *
 
 class TestColorUtils:
-    def test_it_finds_the_distance_between_two_colors(self):
-        colors = [
-            ((0, 0, 0), (0, 0, 0)),
-            ((255, 255, 255), (255, 255, 255)),
-            ((0, 0, 0), (255, 255, 255)),
-            ((194, 210, 231), (73, 100, 105))
-        ]
+    def test_it_finds_a_color_in_an_image(self):
+        # Generate an image with a single red pixel
+        image = Image.new('RGB', (1, 1))
+        image.putpixel((0, 0), (255, 0, 0))
 
-        distances = [
-            0.00,
-            0.00,
-            441.67,
-            206.44,
-        ]
+        # Check if the colors in the image are found
+        tree = get_colors(image)
+        assert(tree.has((255, 0, 0)))
+
+
+    def test_it_finds_one_instance_of_every_color_in_an_image(self):
+        # Generate an image with 2 each of 5 random colors
+        width, height = 2, 5
+        image = Image.new('RGB', (width, height))
+        colors = []
+        for _ in range(5):
+            colors.append((randint(0, 255), randint(0, 255), randint(0, 255)))
+        for y in range(height):
+            for x in range(width):
+                image.putpixel((x, y), colors[y])
+
+        # Check if the colors in the image are found
+        tree = get_colors(image)
+        for color in colors:
+            assert(tree.has(color))
+
+    def test_it_finds_the_distance_between_two_colors(self):
+        colors = [((0, 0, 0), (0, 0, 0)),
+                  ((255, 255, 255), (255, 255, 255)),
+                  ((0, 0, 0), (255, 255, 255)),
+                  ((194, 210, 231), (73, 100, 105))]
+
+        distances = [0.00,
+                     0.00,
+                     441.67,
+                     206.44]
 
         for i in range(len(colors)):
-            assert color.distance(colors[i][0], colors[i][1]) == distances[i]
+            assert distance(colors[i][0], colors[i][1]) == distances[i]
 
     def test_it_converts_rgb_to_hsl(self):
         rgb = [
@@ -63,7 +89,7 @@ class TestColorUtils:
         ]
 
         for i in range(len(rgb)):
-            assert color.to_hsl(rgb[i]) == hsl[i]
+            assert to_hsl(rgb[i]) == hsl[i]
 
     def test_it_converts_from_hsl_to_rgb(self):
         rgb = [
@@ -109,7 +135,7 @@ class TestColorUtils:
         ]
 
         for i in range(len(rgb)):
-            assert color.to_rgb(hsl[i]) == rgb[i]
+            assert to_rgb(hsl[i]) == rgb[i]
 
     # Written to test a curiousity about the algorithm I found. Takes waay to long
     # to be part of the normal test suite, but it to_hsl function is edited, it would
@@ -118,7 +144,7 @@ class TestColorUtils:
     #     for r in range(255):
     #         for g in range(255):
     #             for b in range(255):
-    #                 (h, s, l) = color.to_hsl((r, g, b))
+    #                 (h, s, l) = utils.to_hsl((r, g, b))
     #                 assert h >= 0 and h <= 360
     #                 assert s >= 0 and s <= 1
     #                 assert l >= 0 and l <= 1

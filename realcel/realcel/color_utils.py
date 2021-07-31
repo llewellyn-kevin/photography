@@ -1,3 +1,18 @@
+from PIL import Image
+
+from .color_tree import ColorTree
+
+def get_colors(image: Image):
+    """Takes an image and returns a color tree with every color present."""
+
+    pixels = image.load()
+    width, height = image.size
+    colors = ColorTree()
+    for y in range(height):
+        for x in range(width):
+            colors.append(pixels[x, y])
+    return colors
+
 def distance(color_one: tuple, color_two: tuple) -> float:
     """Finds the distance between two rgb colors.
 
@@ -70,8 +85,6 @@ def to_rgb(color: tuple) -> tuple:
     else: # <= 360
         (rf, gf, bf) = (c, 0, x)
 
-    return (
-        round((rf + m) * 255),
-        round((gf + m) * 255),
-        round((bf + m) * 255),
-    )
+    return (round((rf + m) * 255),
+            round((gf + m) * 255),
+            round((bf + m) * 255))
