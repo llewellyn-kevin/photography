@@ -1,5 +1,3 @@
-
-
 class ColorTree:
     """Simple binary tree implementation for storing rgb color values.
 

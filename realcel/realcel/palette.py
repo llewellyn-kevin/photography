@@ -1,6 +1,6 @@
 from PIL import Image
 
-from . import ColorTree
+from color_tree import ColorTree
 
 def get_colors(image: Image):
     """Takes an image and returns a color tree with every color present."""
