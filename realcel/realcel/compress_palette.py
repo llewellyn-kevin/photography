@@ -1,7 +1,8 @@
 import argparse
+
 from PIL import Image
+
 from palette import get_colors
-# from realcel.palette import get_colors
 
 def open_input_image(input_name: str) -> Image:
     """Open the given input image and return an image object handling any errors."""
