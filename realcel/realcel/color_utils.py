@@ -88,3 +88,15 @@ def to_rgb(color: tuple) -> tuple:
     return (round((rf + m) * 255),
             round((gf + m) * 255),
             round((bf + m) * 255))
+
+def find_closest_color(a: tuple, b: list) -> tuple:
+    """Finds the closest color in list b to color a."""
+
+    best_distance = distance(a, b[0])
+    winning_color = b[0]
+    for comparison_color in b[1:]:
+        delta = distance(a, comparison_color)
+        if delta < best_distance:
+            best_distance = delta
+            winning_color = comparison_color
+    return winning_color
