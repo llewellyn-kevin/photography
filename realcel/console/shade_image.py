@@ -2,19 +2,26 @@ import argparse
 
 from PIL import Image
 
-from realcel.color_utils import get_colors, find_closest_color
+from realcel.color_utils import get_colors, find_closest_color, to_hsl
+from realcel.shader import get_gradients_from_palette
 
 def create_shaded_image(input_image: Image, input_palette: Image, output_target: str) -> bool:
     """Replaces all the colors in an image, with the closest color from the given palette."""
 
     palette_colors = get_colors(input_palette).to_list()
+    gradients = get_gradients_from_palette(palette_colors, 30, 20)
     (width, height) = input_image.size
     output_image = Image.new('RGB', (width, height))
     for x in range(width):
         for y in range(height):
             source_color = input_image.getpixel((x, y))
-            converted_color = find_closest_color(source_color, palette_colors)
-            output_image.putpixel((x, y), converted_color)
+            (_, _, value) = to_hsl(source_color)
+            value = int(100 * value)
+            if value > 99:
+                value = 99
+            gradient = gradients[find_closest_color(source_color, palette_colors)]
+            palette_color = gradient.getpixel((value, 0))
+            output_image.putpixel((x, y), palette_color)
     try:
         output_image.save(output_target)
         return True

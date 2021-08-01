@@ -36,3 +36,11 @@ def generate_auto_shadow_palette(base_color: tuple, tint: int, gradient_width: i
         output_image.putpixel((x, 0), shadow_color)
 
     return output_image
+
+def get_gradients_from_palette(palette: list, tint: int, gradient_width: int) -> dict:
+    """Calls generate_auto_shadow_palette for every color in a list, and returns a map of colors to gradients"""
+
+    color_map = {}
+    for color in palette:
+        color_map[color] = generate_auto_shadow_palette(color, tint, gradient_width)
+    return color_map
