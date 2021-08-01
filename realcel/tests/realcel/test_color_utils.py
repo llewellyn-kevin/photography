@@ -137,6 +137,21 @@ class TestColorUtils:
         for i in range(len(rgb)):
             assert to_rgb(hsl[i]) == rgb[i]
 
+    def test_it_finds_closest_color(self):
+        # This is to test the algorithm that is using the distance algorithm
+        # to find a result. It does not test the accuracy of the distance algorithm.
+        assert find_closest_color((10, 10, 10), [
+            (0, 0, 0), (255, 255, 255)
+        ]) == (0, 0, 0)
+
+        assert find_closest_color((10, 10, 10), [
+            (255, 255, 255), (0, 0, 0)
+        ]) == (0, 0, 0)
+
+        assert find_closest_color((150, 150, 150), [
+            (255, 255, 255), (140, 150, 160), (0, 0, 0)
+        ]) == (140, 150, 160)
+
     # Written to test a curiousity about the algorithm I found. Takes waay to long
     # to be part of the normal test suite, but it to_hsl function is edited, it would
     # be nice to be sure it still follows this standard.
